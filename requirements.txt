@@ -2,3 +2,4 @@ Flask
 newspaper3k
 deep-translator
 lxml
+Werkzeug

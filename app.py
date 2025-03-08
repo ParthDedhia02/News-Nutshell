@@ -4,7 +4,8 @@ import requests
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
-
+import nltk
+nltk.download('punkt')
 # Load environment variables from .env file
 load_dotenv()
 

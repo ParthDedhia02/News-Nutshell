@@ -5,6 +5,8 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 import nltk
+from deep_translator import GoogleTranslator
+
 nltk.download('punkt')
 nltk.download('punkt_tab')
 # Load environment variables from .env file
@@ -22,27 +24,28 @@ def home():
 
 @app.route('/translate', methods=['POST'])
 def translate():
-    url = request.form.get('url')
-    language = request.form.get('language', 'en')
-
-    if not url:
-        return jsonify({'error': 'No URL provided'}), 400
+    url = request.form['url']
+    language = request.form['language']
 
     try:
         article = Article(url)
         article.download()
         article.parse()
-        article.nlp()  # Extract summary
+        article.nlp()
 
+        translator = GoogleTranslator(source='auto', target=language)
+        translated_title = translator.translate(article.title)
+        translated_summary = translator.translate(article.summary)
+
+        # Returning the translated article data as JSON
         return jsonify({
-            'title': article.title,
-            'summary': article.summary,
-            'publish_date': article.publish_date if article.publish_date else "Unknown",
-            'top_image': article.top_image if article.top_image else ""
+            'title': translated_title,
+            'summary': translated_summary,
+            'publish_date': article.publish_date.strftime('%Y-%m-%d') if article.publish_date else 'N/A',
+            'top_image': article.top_image
         })
-
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 400
 
 @app.route('/api/news')
 def get_news():

@@ -30,10 +30,8 @@ async function translateAndSummarize() {
     try {
         const response = await fetch('/translate', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `url=${encodeURIComponent(url)}&language=${encodeURIComponent(language)}`,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `url=${encodeURIComponent(url)}&language=${encodeURIComponent(language)}`
         });
 
         const data = await response.json();
@@ -47,7 +45,7 @@ async function translateAndSummarize() {
 
             const imageElement = document.getElementById('article-image');
             const imageLink = document.getElementById('article-image-link');
-            
+
             imageElement.innerText = data.top_image;
             imageLink.href = data.top_image;
             imageLink.style.display = data.top_image ? 'block' : 'none';
@@ -132,13 +130,10 @@ function toggleTheme() {
     }
 }
 
-// Function to fetch the latest business news
+// Function to fetch the latest business news from the backend
 async function fetchLatestBusinessNews() {
-    const apiKey = 'pub_52897116c29c557e76296c4af10f3988ddc23'; // Your NewsData API key
-    const url = `https://newsdata.io/api/1/news?apikey=${apiKey}&country=in&language=en&category=business`;
-
     try {
-        const response = await fetch(url);
+        const response = await fetch('/api/news');
         const data = await response.json();
         const newsList = document.getElementById('news-list');
 

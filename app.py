@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import nltk
 nltk.download('punkt')
+nltk.download('punkt_tab')
 # Load environment variables from .env file
 load_dotenv()
 
